@@ -14,6 +14,14 @@
 const canvas = document.getElementById("glCanvas");
 const gl = canvas.getContext("webgl");
 
+// main.js
+let cameraPosition = [0, 0, 5];
+let cameraDirection = [0, 0, -1]; // Initially looking along the -Z axis
+let cameraSpeed = 0.1; // Adjust for faster/slower movement
+
+let pitch = 0; // Up/Down rotation (in radians)
+let yaw = -Math.PI / 2; // Left/Right rotation (in radians, starts looking -Z)
+
 // Vertex shader program
 const vsSource = document.getElementById('vshader').textContent.trim();
 // Fragment shader program
@@ -85,6 +93,16 @@ const pyramidIndices = new Uint16Array([
     0, 1, 4,   1, 2, 4,   2, 3, 4,   3, 0, 4,   // Sides
     0, 1, 2,   0, 2, 3    // Base
 ]);
+
+
+// Function to update the camera direction based on pitch and yaw
+function updateCameraDirection() {
+    cameraDirection[0] = Math.cos(pitch) * Math.cos(yaw);
+    cameraDirection[1] = Math.sin(pitch);
+    cameraDirection[2] = Math.cos(pitch) * Math.sin(yaw);
+}
+
+
 
 
 // Initialize shaders and program
@@ -161,9 +179,15 @@ function drawScene() {
 
     gl.useProgram(shaderProgram);
 
-    // Set up the model view matrix
+    // Set up the model view matrix for the camera
     const modelViewMatrix = mat4.create();
-    mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, -5]);
+    const lookAtPosition = [
+        cameraPosition[0] + cameraDirection[0],
+        cameraPosition[1] + cameraDirection[1],
+        cameraPosition[2] + cameraDirection[2],
+    ];
+    mat4.lookAt(modelViewMatrix, cameraPosition, lookAtPosition, [0, 1, 0]);
+
     mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotationX, [1, 0, 0]);
     mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotationY, [0, 1, 0]);
 
@@ -184,6 +208,8 @@ function drawScene() {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 }
+
+
 
 function render() {
     drawScene();

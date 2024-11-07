@@ -10,39 +10,39 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGL Cube with Lighting</title>
+    <title>3D Room - WebGL 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.4.0/gl-matrix.js"></script> <!-- Using a cloud stored file for gl-matrix.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><!-- GitHub Icon -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="layout">
         <canvas id="glCanvas" width="1400" height="800"></canvas> <!-- This component holds our render area for our cube-->
         <div class="container"> <!-- This component holds header information and user notice -->
-            <h1>3D Cube with Phong Reflection Lighting</h1>
-            <p>COMP 153 - Assignment 5 - 10/30/2024</p>
+            <h1>3D Room - WebGL 2.0</h1>
+            <p>COMP 153 - Assignment 5 - 11/7/2024</p>
             <p>Developer: Wesly Barayuga</p>
 
             <div class="notice-box">
                 <h2>User Notice</h2>
                 <ul>
-                    <li>Move the cube via <strong>arrow keys</strong></li>
-                    <li>Move the position light via <strong>WASD</strong></li>
-                    <li>Press <strong>1</strong> to toggle positional light <strong>ON</strong></li>
-                    <li>Press <strong>2</strong> to toggle positional light <strong>OFF</strong></li>
-                    <li>Press <strong>3</strong> to toggle directional light <strong>ON</strong></li>
-                    <li>Press <strong>4</strong> to toggle directional light <strong>OFF</strong></li>
-                    <li>
-                        <a href="https://github.com/wes-brook/3D-Cube-with-Phong-Reflection-Ligthting" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           aria-label="GitHub repository for 3D Cube with Phong Reflection Lighting" 
-                           class="my-link">
-                            View GitHub Repository
-                        </a>
-                    </li>
+                    <li>Click anywhere the viewport to begin</li>
+                    <li>Move the camera position with <strong>WASD</strong></li>
+                    <li>Move the camera view with your <strong>mouse</strong></li>
+                    <li>Exit the viewport by pressing the <strong>ESC</strong> key</li>
+                    <!-- <li>Move the position light via <strong>WASD</strong></li> -->
+                    <!-- <li>Press <strong>1</strong> to toggle positional light <strong>ON</strong></li> -->
+                    <!-- <li>Press <strong>2</strong> to toggle positional light <strong>OFF</strong></li> -->
+                    <!-- <li>Press <strong>3</strong> to toggle directional light <strong>ON</strong></li> -->
+                    <!-- <li>Press <strong>4</strong> to toggle directional light <strong>OFF</strong></li> -->
                 </ul>
             </div>
+        </div>
+        <div>
+            <a href="https://github.com/wes-brook/3D-Room-WebGL.20" target="_blank" id="github-button" title="View GitHub Repository">
+                <i class="fab fa-github"></i>
+            </a>
         </div>
     </div>
 
