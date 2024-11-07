@@ -1,0 +1,118 @@
+<!--
+FileName:   index.html
+Author:     Wesly Barayuga
+Date:       10/30/2024
+Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection model
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Cube with Lighting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.4.0/gl-matrix.js"></script> <!-- Using a cloud stored file for gl-matrix.js -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="layout">
+        <canvas id="glCanvas" width="1400" height="800"></canvas> <!-- This component holds our render area for our cube-->
+        <div class="container"> <!-- This component holds header information and user notice -->
+            <h1>3D Cube with Phong Reflection Lighting</h1>
+            <p>COMP 153 - Assignment 5 - 10/30/2024</p>
+            <p>Developer: Wesly Barayuga</p>
+
+            <div class="notice-box">
+                <h2>User Notice</h2>
+                <ul>
+                    <li>Move the cube via <strong>arrow keys</strong></li>
+                    <li>Move the position light via <strong>WASD</strong></li>
+                    <li>Press <strong>1</strong> to toggle positional light <strong>ON</strong></li>
+                    <li>Press <strong>2</strong> to toggle positional light <strong>OFF</strong></li>
+                    <li>Press <strong>3</strong> to toggle directional light <strong>ON</strong></li>
+                    <li>Press <strong>4</strong> to toggle directional light <strong>OFF</strong></li>
+                    <li>
+                        <a href="https://github.com/wes-brook/3D-Cube-with-Phong-Reflection-Ligthting" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           aria-label="GitHub repository for 3D Cube with Phong Reflection Lighting" 
+                           class="my-link">
+                            View GitHub Repository
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vertex Shader -->
+    <script type="shader-vertex" id="vshader">
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        uniform vec3 uLightDirection;
+        uniform vec3 uLightPosition;
+
+        varying vec3 vNormal;
+        varying vec3 vFragPos;
+        varying vec3 vLightDirection;
+        varying vec3 vViewDirection;
+
+        void main() {
+            vFragPos = vec3(uModelViewMatrix * vec4(aPosition, 1.0));
+            vNormal = normalize(mat3(uModelViewMatrix) * aNormal);
+            vLightDirection = normalize(uLightDirection);
+            vViewDirection = normalize(-vFragPos);
+            gl_Position = uProjectionMatrix * vec4(vFragPos, 1.0);
+        }
+    </script>
+
+    <!-- Fragment Shader with custom Phong Reflection implementation -->
+    <script type="shader-fragment" id="fshader">
+        precision mediump float;
+
+        varying vec3 vNormal;
+        varying vec3 vFragPos;
+        varying vec3 vLightDirection;
+        varying vec3 vViewDirection;
+
+        uniform vec3 uLightColor;
+        uniform vec3 uAmbientColor;
+        uniform vec3 uLightPosition;
+
+        uniform bool uUseDirectionalLight;
+        uniform bool uUsePositionalLight;
+
+        void main() {
+            vec3 ambient = uAmbientColor;
+
+            vec3 diffuse = vec3(0.0);
+            if (uUseDirectionalLight) {
+                float diff = max(dot(vNormal, -vLightDirection), 0.0);
+                diffuse += diff * uLightColor;
+            }
+
+            if (uUsePositionalLight) {
+                float distance = length(uLightPosition - vFragPos);
+                vec3 lightDir = normalize(uLightPosition - vFragPos);
+                float diff = max(dot(vNormal, lightDir), 0.0);
+                diffuse += diff * uLightColor / (distance * distance * 0.1); // Attenuation
+            }
+
+            vec3 reflectDir = reflect(-vLightDirection, vNormal);
+            float spec = pow(max(dot(vViewDirection, reflectDir), 0.0), 32.0);
+            vec3 specular = spec * uLightColor;
+
+            gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
+        }
+    </script>
+
+    <!-- Load main.js -->
+    <script src="main.js"></script>
+    <!-- Load controller.js -->
+    <script src="controller.js"></script>
+</body>
+</html>
