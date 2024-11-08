@@ -14,10 +14,9 @@
 const canvas = document.getElementById("glCanvas");
 const gl = canvas.getContext("webgl");
 
-// main.js
 let cameraPosition = [0, 0, 5];
 let cameraDirection = [0, 0, -1]; // Initially looking along the -Z axis
-let cameraSpeed = 0.1; // Adjust for faster/slower movement
+let cameraSpeed = 0.25; // Adjust for faster/slower movement
 
 let pitch = 0; // Up/Down rotation (in radians)
 let yaw = -Math.PI / 2; // Left/Right rotation (in radians, starts looking -Z)
@@ -28,7 +27,7 @@ const vsSource = document.getElementById('vshader').textContent.trim();
 const fsSource = document.getElementById('fshader').textContent.trim();
 
 // Define the cube vertices, normals, and indices
-const vertices = new Float32Array([
+const cubeVertices = new Float32Array([
     // Front face
     -1, -1,  1,   0,  0,  1,
      1, -1,  1,   0,  0,  1,
@@ -61,7 +60,7 @@ const vertices = new Float32Array([
      1, -1, -1,   0, -1,  0,
 ]);
 
-const indices = new Uint16Array([
+const cubeIndices = new Uint16Array([
     0, 1, 2, 0, 2, 3,
     4, 5, 6, 4, 6, 7,
     8, 9, 10, 8, 10, 11,
@@ -72,28 +71,12 @@ const indices = new Uint16Array([
 
 // Floor vertices and indices
 const floorVertices = new Float32Array([
-    -5, -1, 5, 0, 1, 0,  // bottom-left
-    5, -1, 5, 0, 1, 0,   // bottom-right
-    5, -1, -5, 0, 1, 0,  // top-right
-    -5, -1, -5, 0, 1, 0  // top-left
+    -25, -2,  25, 0, 1, 0, // bottom-left
+     25, -2,  25, 0, 1, 0, // bottom-right
+     25, -2, -25, 0, 1, 0, // top-right
+    -25, -2, -25, 0, 1, 0  // top-left
 ]);
 const floorIndices = new Uint16Array([0, 1, 2, 0, 2, 3]);
-
-// Pyramid vertices and indices
-const pyramidVertices = new Float32Array([
-    // Base
-    -1, -1, -1, 0, -1, 0,   // bottom-left
-     1, -1, -1, 0, -1, 0,   // bottom-right
-     1, -1,  1, 0, -1, 0,   // top-right
-    -1, -1,  1, 0, -1, 0,   // top-left
-    // Peak
-     0,  1,  0, 0, 1, 0,    // top point
-]);
-const pyramidIndices = new Uint16Array([
-    0, 1, 4,   1, 2, 4,   2, 3, 4,   3, 0, 4,   // Sides
-    0, 1, 2,   0, 2, 3    // Base
-]);
-
 
 // Function to update the camera direction based on pitch and yaw
 function updateCameraDirection() {
@@ -101,9 +84,6 @@ function updateCameraDirection() {
     cameraDirection[1] = Math.sin(pitch);
     cameraDirection[2] = Math.cos(pitch) * Math.sin(yaw);
 }
-
-
-
 
 // Initialize shaders and program
 function initShaders() {
@@ -125,25 +105,32 @@ function initShaders() {
 
 const shaderProgram = initShaders();
 
-// Create buffer for vertices
+// Create buffer for the cube vertices
 const vertexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-
+gl.bufferData(gl.ARRAY_BUFFER, cubeVertices, gl.STATIC_DRAW);
 
 // Create buffer for indices
 const indexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cubeIndices, gl.STATIC_DRAW);
 
+// Create buffer for the floor vertices
+const floorVertexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, floorVertexBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, floorVertices, gl.STATIC_DRAW);
 
+// Create buffer for the floor indices
+const floorIndexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, floorIndexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, floorIndices, gl.STATIC_DRAW);
 
 // Define attribute locations
 const positionLocation = gl.getAttribLocation(shaderProgram, "aPosition");
 const normalLocation = gl.getAttribLocation(shaderProgram, "aNormal");
 
-// Enable vertex attributes
+// Enable vertex attributes for the cube
+gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 6 * 4, 0);
 gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
 gl.enableVertexAttribArray(positionLocation);
@@ -188,9 +175,6 @@ function drawScene() {
     ];
     mat4.lookAt(modelViewMatrix, cameraPosition, lookAtPosition, [0, 1, 0]);
 
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotationX, [1, 0, 0]);
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotationY, [0, 1, 0]);
-
     // Set up the projection matrix
     const projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, Math.PI / 4, canvas.width / canvas.height, 0.1, 100.0);
@@ -205,14 +189,42 @@ function drawScene() {
     gl.uniform1i(uUseDirectionalLightLocation, useDirectionalLight);
     gl.uniform1i(uUsePositionalLightLocation, usePositionalLight);
 
+    // Draw the floor
+    gl.bindBuffer(gl.ARRAY_BUFFER, floorVertexBuffer);
+    gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 6 * 4, 0);
+    gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.enableVertexAttribArray(normalLocation);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, floorIndexBuffer);
+    gl.drawElements(gl.TRIANGLES, floorIndices.length, gl.UNSIGNED_SHORT, 0);
+
+    // Rotate the cube and set the model view matrix for it
+    const cubeModelViewMatrix = mat4.clone(modelViewMatrix);
+    mat4.rotate(cubeModelViewMatrix, cubeModelViewMatrix, cubeRotationX, [1, 0, 0]);
+    mat4.rotate(cubeModelViewMatrix, cubeModelViewMatrix, cubeRotationY, [0, 1, 0]);
+
+    // Send the cube's model view matrix to the shaders
+    gl.uniformMatrix4fv(uModelViewMatrixLocation, false, cubeModelViewMatrix);
+
+    // Draw the cube
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 6 * 4, 0);
+    gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.enableVertexAttribArray(normalLocation);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, cubeIndices.length, gl.UNSIGNED_SHORT, 0);
 }
 
-
-
 function render() {
+    // Update the cube's rotation
+    cubeRotationX += 0.006;
+    cubeRotationY += 0.006;
+
+    // Draw the scene
     drawScene();
+
+    // Request to render the next frame
     requestAnimationFrame(render);
 }
 
