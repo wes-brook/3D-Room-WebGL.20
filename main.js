@@ -1,20 +1,19 @@
 /* ===========================================================================================================================
  * File: main.js
  * Author: Wesly Barayuga
- * Date: 10/30/2024
- * Purpose: Define internal state for WebGL 2.0 to model, render, and control a 3D Cube with PHONG lighting 
+ * Date: 11/9/2024
+ * Purpose: Define internal state for WebGL 2.0 to model, render, and control a 3D environment
  * 
  * User Notice:
- *  - Includes a Cube composed of 12 triangles
- *  - Includes a posisional light
- *  - Includes a directional light
- *  - This was fun to make :)
+ *  - ///
  * =========================================================================================================================== */
 
-const canvas = document.getElementById("glCanvas");
-const gl = canvas.getContext("webgl");
+let cubeRotationX = 0;
+let cubeRotationY = 0;
+let useDirectionalLight = true;
+let usePositionalLight = true;
 
-let cameraPosition = [0, 0, 5];
+let cameraPosition = [0, 0, 10]; // Setting the camera 10 units from environment center
 let cameraDirection = [0, 0, -1]; // Initially looking along the -Z axis
 let cameraSpeed = 0.25; // Adjust for faster/slower movement
 
@@ -26,6 +25,8 @@ const vsSource = document.getElementById('vshader').textContent.trim();
 // Fragment shader program
 const fsSource = document.getElementById('fshader').textContent.trim();
 
+const shaderProgram = initShaders();
+
 // Define the cube vertices, normals, and indices
 const cubeVertices = new Float32Array([
     // Front face
@@ -33,27 +34,27 @@ const cubeVertices = new Float32Array([
      1, -1,  1,   0,  0,  1,
      1,  1,  1,   0,  0,  1,
     -1,  1,  1,   0,  0,  1,
-    // Back face
+    // Back f1ce
     -1, -1, -1,   0,  0, -1,
     -1,  1, -1,   0,  0, -1,
      1,  1, -1,   0,  0, -1,
      1, -1, -1,   0,  0, -1,
-    // Left face
+    // Left f1ce
     -1, -1, -1,  -1,  0,  0,
     -1, -1,  1,  -1,  0,  0,
     -1,  1,  1,  -1,  0,  0,
     -1,  1, -1,  -1,  0,  0,
-    // Right face
+    // Right 1ace
      1, -1, -1,   1,  0,  0,
      1,  1, -1,   1,  0,  0,
      1,  1,  1,   1,  0,  0,
      1, -1,  1,   1,  0,  0,
-    // Top face
+    // Top fa1e
     -1,  1, -1,   0,  1,  0,
      1,  1, -1,   0,  1,  0,
      1,  1,  1,   0,  1,  0,
     -1,  1,  1,   0,  1,  0,
-    // Bottom face
+    // Bottom1face
     -1, -1, -1,   0, -1,  0,
     -1, -1,  1,   0, -1,  0,
      1, -1,  1,   0, -1,  0,
@@ -61,9 +62,9 @@ const cubeVertices = new Float32Array([
 ]);
 
 const cubeIndices = new Uint16Array([
-    0, 1, 2, 0, 2, 3,
-    4, 5, 6, 4, 6, 7,
-    8, 9, 10, 8, 10, 11,
+    0,  1,  2,  0,  2,  3,
+    4,  5,  6,  4,  6,  7,
+    8,  9,  10, 8,  10, 11,
     12, 13, 14, 12, 14, 15,
     16, 17, 18, 16, 18, 19,
     20, 21, 22, 20, 22, 23
@@ -76,7 +77,8 @@ const floorVertices = new Float32Array([
      25, -2, -25, 0, 1, 0, // top-right
     -25, -2, -25, 0, 1, 0  // top-left
 ]);
-const floorIndices = new Uint16Array([0, 1, 2, 0, 2, 3]);
+const floorIndices = new Uint16Array([0, 1, 2, 
+                                      0, 2, 3]);
 
 // Function to update the camera direction based on pitch and yaw
 function updateCameraDirection() {
@@ -103,8 +105,6 @@ function initShaders() {
     return shaderProgram;
 }
 
-const shaderProgram = initShaders();
-
 // Create buffer for the cube vertices
 const vertexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -129,13 +129,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, floorIndices, gl.STATIC_DRAW);
 const positionLocation = gl.getAttribLocation(shaderProgram, "aPosition");
 const normalLocation = gl.getAttribLocation(shaderProgram, "aNormal");
 
-// Enable vertex attributes for the cube
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 6 * 4, 0);
-gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
-gl.enableVertexAttribArray(positionLocation);
-gl.enableVertexAttribArray(normalLocation);
-
 // Set up uniforms
 const uModelViewMatrixLocation = gl.getUniformLocation(shaderProgram, "uModelViewMatrix");
 const uProjectionMatrixLocation = gl.getUniformLocation(shaderProgram, "uProjectionMatrix");
@@ -154,10 +147,7 @@ const light = {
     ambientColor: [0.1, 0.1, 0.1]
 };
 
-let cubeRotationX = 0;
-let cubeRotationY = 0;
-let useDirectionalLight = true;
-let usePositionalLight = true;
+
 
 function drawScene() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -217,10 +207,6 @@ function drawScene() {
 }
 
 function render() {
-    // Update the cube's rotation
-    cubeRotationX += 0.006;
-    cubeRotationY += 0.006;
-
     // Draw the scene
     drawScene();
 

@@ -1,11 +1,15 @@
-// controller.js
+/* ===========================================================================================================================
+ * File: controller.js
+ * Author: Wesly Barayuga
+ * Date: 12/9/2024
+ * Purpose: Define webpage controller for the webgl viewport
+ * 
+ * User Notice:
+ *  - ///
+ * =========================================================================================================================== */
+
 const keysPressed = {};
 let pointerLocked = false;
-
-// Debugging function to log key press actions
-function logKeyAction(event) {
-    console.log(`Key ${event.key} ${event.type}`);
-}
 
 canvas.addEventListener("click", () => {
     canvas.requestPointerLock();
@@ -22,12 +26,10 @@ document.addEventListener("pointerlockchange", () => {
         // Add key listeners only when pointer is locked
         document.addEventListener("keydown", (event) => {
             keysPressed[event.key] = true;
-            logKeyAction(event); // For debugging
         });
 
         document.addEventListener("keyup", (event) => {
             keysPressed[event.key] = false;
-            logKeyAction(event); // For debugging
         });
     } else {
         // Disable mouse movement and key listeners when unlocked
@@ -100,8 +102,8 @@ function updateMovement() {
 }
 
 function updateCubeRotation() {
-    cubeRotationY += 0.006;
-    cubeRotationX += 0.006;
+    cubeRotationY += 0.0006;
+    cubeRotationX += 0.0006;
 
     // Keep updating cube rotation
     requestAnimationFrame(updateCubeRotation);

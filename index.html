@@ -15,32 +15,6 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.4.0/gl-matrix.js"></script> <!-- Using a cloud stored file for gl-matrix.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><!-- GitHub Icon -->
     <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="layout">
-        <canvas id="glCanvas" width="1400" height="800"></canvas> <!-- This component holds our render area for our cube-->
-        <div class="container"> <!-- This component holds header information and user notice -->
-            <h1>3D Room - WebGL 2.0</h1>
-            <p>COMP 153 - Assignment 5 - 11/7/2024</p>
-            <p>Developer: Wesly Barayuga</p>
-
-            <div class="notice-box">
-                <h2>User Notice</h2>
-                <ul>
-                    <li>Click anywhere in the viewport to begin</li>
-                    <li>Move the camera position with <strong>WASD</strong></li>
-                    <li>Move the camera view with your <strong>mouse</strong></li>
-                    <li>Exit the viewport by pressing the <strong>ESC</strong> key</li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <a href="https://github.com/wes-brook/3D-Room-WebGL.20" target="_blank" id="github-button" title="View GitHub Repository">
-                <i class="fab fa-github"></i>
-            </a>
-        </div>
-    </div>
-
     <!-- Vertex Shader -->
     <script type="shader-vertex" id="vshader">
         attribute vec3 aPosition;
@@ -103,11 +77,37 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
 
             gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
         }
-    </script>
+    </script>                                     <!-- NOTE: Start of project workflow -->  
+    <script src="view.js" defer></script>         <!-- Initialize `gl` and `canvas` -->
+    <script src="main.js" defer></script>         <!-- Load main.js -->
+    <script src="controller.js" defer></script>   <!-- Load controller.js -->
+</head>
+<body>
+    <div class="layout">
+        <div id="canvas-holder">
+            <canvas id="glCanvas" width="1400" height="800"></canvas> <!-- This component holds our render area for our cube-->
+        </div>
+        <div class="container"> <!-- This component holds header information and user notice -->
+            <h1>3D Room - WebGL 2.0</h1>
+            <p>COMP 153 - Assignment 5 - 11/7/2024</p>
+            <p>Developer: Wesly Barayuga</p>
 
-    <!-- Load main.js -->
-    <script src="main.js"></script>
-    <!-- Load controller.js -->
-    <script src="controller.js"></script>
+            <div class="notice-box">
+                <h2>User Notice</h2>
+                <ul>
+                    <li>Click anywhere in the viewport to begin</li>
+                    <li>Move the camera position with <strong>ASWD</strong></li>
+                    <li>Move the camera view with your <strong>mouse</strong></li>
+                    <li>Exit the viewport by pressing the <strong>ESC</strong> key</li>
+                    <li>Click the <strong>GitHub</strong> icon to view the repository</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <a href="https://github.com/wes-brook/3D-Room-WebGL.20" target="_blank" id="github-button" title="View GitHub Repository">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
