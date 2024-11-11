@@ -6,6 +6,9 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
 -->
 
 <!DOCTYPE html>
+<!-- Load image files -->
+<img src="other/floor.jpg" id="floor" hidden>
+<img src="other/wall.jpg" id="wall" hidden>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,22 +22,24 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
     <script type="shader-vertex" id="vshader">
         attribute vec3 aPosition;
         attribute vec3 aNormal;
+        attribute vec2 aTexCoord;
 
         uniform mat4 uModelViewMatrix;
         uniform mat4 uProjectionMatrix;
         uniform vec3 uLightDirection;
-        uniform vec3 uLightPosition;
 
         varying vec3 vNormal;
         varying vec3 vFragPos;
         varying vec3 vLightDirection;
         varying vec3 vViewDirection;
+        varying vec2 vTexCoord;
 
         void main() {
             vFragPos = vec3(uModelViewMatrix * vec4(aPosition, 1.0));
             vNormal = normalize(mat3(uModelViewMatrix) * aNormal);
             vLightDirection = normalize(uLightDirection);
             vViewDirection = normalize(-vFragPos);
+            vTexCoord = aTexCoord;
             gl_Position = uProjectionMatrix * vec4(vFragPos, 1.0);
         }
     </script>
@@ -47,35 +52,39 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
         varying vec3 vFragPos;
         varying vec3 vLightDirection;
         varying vec3 vViewDirection;
-
+        varying vec2 vTexCoord;
+        
         uniform vec3 uLightColor;
         uniform vec3 uAmbientColor;
         uniform vec3 uLightPosition;
-
+        
         uniform bool uUseDirectionalLight;
         uniform bool uUsePositionalLight;
-
+        
+        uniform sampler2D uTexture;
+        
         void main() {
             vec3 ambient = uAmbientColor;
-
-            vec3 diffuse = vec3(0.0);
+            vec3 color = texture2D(uTexture, vTexCoord).rgb;
+        
+            vec3 diffuse = vec3(0.1);
             if (uUseDirectionalLight) {
                 float diff = max(dot(vNormal, -vLightDirection), 0.0);
                 diffuse += diff * uLightColor;
             }
-
+        
             if (uUsePositionalLight) {
                 float distance = length(uLightPosition - vFragPos);
                 vec3 lightDir = normalize(uLightPosition - vFragPos);
                 float diff = max(dot(vNormal, lightDir), 0.0);
-                diffuse += diff * uLightColor * 4.0/ (distance * distance * 0.1); // Attenuation
+                diffuse += diff * uLightColor * 3.0 / (distance * distance * 0.1); // Attenuation
             }
-
+        
             vec3 reflectDir = reflect(-vLightDirection, vNormal);
             float spec = pow(max(dot(vViewDirection, reflectDir), 0.0), 32.0);
             vec3 specular = spec * uLightColor;
-
-            gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
+        
+            gl_FragColor = vec4(color * (ambient + diffuse) + specular, 1.0);
         }
     </script>                                     <!-- NOTE: Start of project workflow -->  
     <script src="view.js" defer></script>         <!-- Initialize `gl` and `canvas` -->

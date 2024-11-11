@@ -30,16 +30,7 @@ const shaderProgram = initShaders();
 // Create index and vertex buffer for the cube
 const { cubeVertexBuffer, cubeIndexBuffer } = createCubeBuffers();
 
-// Create index and vertex buffer for the floor
-// const { floorVertexBuffer, floorIndexBuffer } = createFloorBuffers();
-
 const room = new Room();
-// floorVertexBuffer: this.floorVertexBuffer,
-// floorIndexBuffer: this.floorIndexBuffer,
-// wallVertexBuffer: this.wallVertexBuffer,
-// wallIndexBuffer: this.wallIndexBuffer
-//const floorWithWallsBuffers = floorWithWalls.createFloorBuffers();
-
 // Need to add other objects here...
 
 
@@ -47,6 +38,7 @@ const room = new Room();
 // Define attribute locations
 const positionLocation = gl.getAttribLocation(shaderProgram, "aPosition");
 const normalLocation = gl.getAttribLocation(shaderProgram, "aNormal");
+const texCoordLocation = gl.getAttribLocation(shaderProgram, "aTexCoord");
 
 // Set up uniforms
 const uModelViewMatrixLocation = gl.getUniformLocation(shaderProgram, "uModelViewMatrix");
@@ -57,6 +49,7 @@ const uLightColorLocation = gl.getUniformLocation(shaderProgram, "uLightColor");
 const uAmbientColorLocation = gl.getUniformLocation(shaderProgram, "uAmbientColor");
 const uUseDirectionalLightLocation = gl.getUniformLocation(shaderProgram, "uUseDirectionalLight");
 const uUsePositionalLightLocation = gl.getUniformLocation(shaderProgram, "uUsePositionalLight");
+
 
 // Light and material properties
 const light = {
@@ -123,6 +116,7 @@ function drawScene() {
     gl.uniform1i(uUsePositionalLightLocation, usePositionalLight);
 
     // DRAW THE ROOM
+
     room.drawFloor();
     room.drawWalls();
 
@@ -140,6 +134,7 @@ function drawScene() {
     gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
     gl.enableVertexAttribArray(positionLocation);
     gl.enableVertexAttribArray(normalLocation);
+    gl.disableVertexAttribArray(texCoordLocation);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer);
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 }
