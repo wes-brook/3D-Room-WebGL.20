@@ -68,7 +68,7 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
                 float distance = length(uLightPosition - vFragPos);
                 vec3 lightDir = normalize(uLightPosition - vFragPos);
                 float diff = max(dot(vNormal, lightDir), 0.0);
-                diffuse += diff * uLightColor / (distance * distance * 0.1); // Attenuation
+                diffuse += diff * uLightColor * 4.0/ (distance * distance * 0.1); // Attenuation
             }
 
             vec3 reflectDir = reflect(-vLightDirection, vNormal);
@@ -79,6 +79,9 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
         }
     </script>                                     <!-- NOTE: Start of project workflow -->  
     <script src="view.js" defer></script>         <!-- Initialize `gl` and `canvas` -->
+    <script src="Auxiliary.js"></script>
+    <script src="cube.js"></script>
+    <script src="room.js"></script>
     <script src="main.js" defer></script>         <!-- Load main.js -->
     <script src="controller.js" defer></script>   <!-- Load controller.js -->
 </head>
