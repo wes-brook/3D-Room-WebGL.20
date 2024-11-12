@@ -23,7 +23,32 @@ let yaw = Math.PI / 4; // Left/Right rotation (in radians, starts looking -Z)
 // Main shader program initialization
 const vsSource = document.getElementById('vshader').textContent.trim();
 const fsSource = document.getElementById('fshader').textContent.trim();
-const shaderProgram = initShaders();
+const shaderProgram = initShaders(vsSource, fsSource);
+
+//
+// Initialize shaders for the transparent cube
+const vsSourceTransparent = document.getElementById('vshader_transparent').textContent.trim();
+const fsSourceTransparent = document.getElementById('fshader_transparent').textContent.trim();
+const transparentShaderProgram = initShaders(vsSourceTransparent, fsSourceTransparent);
+
+// Define attribute locations for the transparent shader
+const positionLocationTransparent = gl.getAttribLocation(transparentShaderProgram, "aPosition");
+const normalLocationTransparent = gl.getAttribLocation(transparentShaderProgram, "aNormal");
+
+// Set up uniforms for the transparent shader
+const uModelViewMatrixLocationTransparent = gl.getUniformLocation(transparentShaderProgram, "uModelViewMatrix");
+const uProjectionMatrixLocationTransparent = gl.getUniformLocation(transparentShaderProgram, "uProjectionMatrix");
+const uLightDirectionLocationTransparent = gl.getUniformLocation(transparentShaderProgram, "uLightDirection");
+const uLightColorLocationTransparent = gl.getUniformLocation(transparentShaderProgram, "uLightColor");
+const uAmbientColorLocationTransparent = gl.getUniformLocation(transparentShaderProgram, "uAmbientColor");
+
+// Get the resolution of the canvas
+const resolution = [canvas.width, canvas.height];
+
+// Get the location of the resolution uniform
+const uTransparentResolutionLocation = gl.getUniformLocation(transparentShaderProgram, "uResolution");
+
+//
 
 // Create index and vertex buffer for the cube
 const { cubeVertexBuffer, cubeIndexBuffer } = createCubeBuffers();
@@ -34,7 +59,6 @@ const desk2 = new Desk2();
 const monitor1 = new Monitor();
 const monitor2 = new Monitor();
 const monitor3 = new Monitor();
-// Need to add other objects here...
 
 
 
@@ -71,7 +95,7 @@ function updateCameraDirection() {
 }
 
 // Initialize shaders and program
-function initShaders() {
+function initShaders(vsSource, fsSource) {
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vertexShader, vsSource);
     gl.compileShader(vertexShader);
@@ -128,26 +152,39 @@ function drawScene() {
 
     
 
+    // Use the transparent shader program for the cube
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.useProgram(transparentShaderProgram);
+
+    // Send matrices and light data to the transparent shaders
+    gl.uniformMatrix4fv(uModelViewMatrixLocationTransparent, false, modelViewMatrix);
+    gl.uniformMatrix4fv(uProjectionMatrixLocationTransparent, false, projectionMatrix);
+    gl.uniform3fv(uLightDirectionLocationTransparent, light.direction);
+    gl.uniform3fv(uLightColorLocationTransparent, light.color);
+    gl.uniform3fv(uAmbientColorLocationTransparent, light.ambientColor);
+
     // Rotate the cube and set the model view matrix for it
     const cubeModelViewMatrix = mat4.clone(modelViewMatrix);
     mat4.scale(cubeModelViewMatrix, cubeModelViewMatrix, [0.5, 0.5, 0.5]);
     mat4.rotate(cubeModelViewMatrix, cubeModelViewMatrix, cubeRotationX, [1, 0, 0]);
     mat4.rotate(cubeModelViewMatrix, cubeModelViewMatrix, cubeRotationY, [0, 1, 0]);
 
-    // Send the cube's model view matrix to the shaders
-    gl.uniformMatrix4fv(uModelViewMatrixLocation, false, cubeModelViewMatrix);
+    // Send the cube's model view matrix to the transparent shaders
+    gl.uniformMatrix4fv(uModelViewMatrixLocationTransparent, false, cubeModelViewMatrix);
 
-    // DRAW THE CUBE
+    // DRAW THE CUBE with the transparent shader
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexBuffer);
-    gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 6 * 4, 0);
-    gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
-    gl.enableVertexAttribArray(positionLocation);
-    gl.enableVertexAttribArray(normalLocation);
-    gl.disableVertexAttribArray(texCoordLocation);
+    gl.vertexAttribPointer(positionLocationTransparent, 3, gl.FLOAT, false, 6 * 4, 0);
+    gl.vertexAttribPointer(normalLocationTransparent, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
+    gl.enableVertexAttribArray(positionLocationTransparent);
+    gl.enableVertexAttribArray(normalLocationTransparent);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer);
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
-
+    gl.disable(gl.BLEND);
+    gl.useProgram(shaderProgram);
+    
     // DRAW MY MONITORS
     monitor1.drawMonitor(modelViewMatrix, [0, 5.5, -10], Math.PI / -4, "screen2");
     monitor2.drawMonitor(modelViewMatrix, [2.25, 5.5, -8.75], 0.0, "screen3");

@@ -106,6 +106,62 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
             gl_FragColor = vec4(color * (ambient + diffuse) + specular, 1.0);
         }
     </script>
+    <script type="shader-vertex" id="vshader_transparent">
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+    
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+    
+        varying vec3 vNormal;
+        varying vec3 vFragPos;
+        varying vec4 vPosition;
+    
+        void main() {
+            vFragPos = vec3(uModelViewMatrix * vec4(aPosition, 1.0));
+            vNormal = normalize(mat3(uModelViewMatrix) * aNormal);
+            vPosition = uProjectionMatrix * vec4(vFragPos, 1.0);
+            gl_Position = vPosition;
+        }
+    </script>
+    
+    <script type="shader-fragment" id="fshader_transparent">
+        precision mediump float;
+    
+        varying vec3 vNormal;
+        varying vec3 vFragPos;
+        varying vec4 vPosition;
+    
+        uniform vec3 uLightDirection;
+        uniform vec3 uLightColor;
+        uniform vec3 uAmbientColor;
+        uniform vec2 uResolution;  // Add the screen resolution as a uniform
+    
+        void main() {
+            // Calculate pixel size (e.g., 20x20 pixels)
+            float pixelSize = 20.0;
+            vec2 uv = vPosition.xy / vPosition.w;
+            uv = uv * 0.5 + 0.5; // Transform from clip space to [0, 1]
+            
+            // Snap UV coordinates to the pixel grid
+            uv = floor(uv * uResolution / pixelSize) * pixelSize / uResolution;
+    
+            // Transform back to clip space
+            vec2 snappedPos = uv * 2.0 - 1.0;
+            snappedPos *= vPosition.w;
+    
+            // Lighting calculations
+            vec3 ambient = uAmbientColor * 1.5;
+            vec3 diffuse = vec3(0.025);
+            float diff = max(dot(vNormal, -uLightDirection), 0.0);
+            diffuse += diff * uLightColor;
+    
+            vec3 color = vec3(1.0, 0.84, 0.0); // Use a fixed color for the transparent cube
+    
+            gl_FragColor = vec4(color * (ambient + diffuse), 0.3); // 50% opacity
+        }
+    </script>
+    
                            
     
                                                     <!-- NOTE: Start of project workflow -->  
@@ -136,7 +192,7 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
                     <li>Move the camera position with <strong>ASWD</strong></li>
                     <li>Move the camera view with your <strong>mouse</strong></li>
                     <li>Exit the viewport by pressing the <strong>ESC</strong> key</li>
-                    <li>The <strong>cube</strong> indicates the center at (0x, 0y, 0z)</li>
+                    <li>The <strong>gold cube</strong> indicates the center at (0x, 0y, 0z)</li>
                     <li>Click the <strong>GitHub</strong> icon to view the repository</li>
                 </ul>
             </div>
