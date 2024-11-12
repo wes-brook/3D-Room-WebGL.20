@@ -2,11 +2,11 @@
 FileName:   index.html
 Author:     Wesly Barayuga
 Date:       10/30/2024
-Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection model
+Purpose:    Define HTML code to simulate a 3D rendering of my cubicle at Micron
 -->
 
 <!DOCTYPE html>
-<!-- Load image files -->
+<!-- Load image texture files -->
 <img src="other/floor.jpg" id="floor" hidden>
 <img src="other/wall.jpg" id="wall" hidden>
 <img src="other/desk.jpg" id="desk" hidden>
@@ -48,7 +48,7 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
             gl_Position = uProjectionMatrix * vec4(vFragPos, 1.0);
         }
     </script>
-    <!-- Fragment Shader with custom Phong Reflection implementation -->
+    <!-- Fragment Shader Phong Reflection implementation -->
     <script type="shader-fragment" id="fshader">
         precision mediump float;
 
@@ -124,7 +124,6 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
             gl_Position = vPosition;
         }
     </script>
-    
     <script type="shader-fragment" id="fshader_transparent">
         precision mediump float;
     
@@ -161,17 +160,14 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
             gl_FragColor = vec4(color * (ambient + diffuse), 0.3); // 50% opacity
         }
     </script>
-    
-                           
-    
                                                     <!-- NOTE: Start of project workflow -->  
     <script src="view.js" defer></script>           <!-- Initialize `gl` and `canvas` -->
     <script src="Auxiliary.js"></script>            <!-- Load helper functions -->
-    <script src="cube.js" defer></script>                 <!-- Load cube.js -->
-    <script src="room.js" defer></script>                 <!-- Load room.js -->
-    <script src="desk.js" defer></script>                 <!-- Load room.js -->
-    <script src="desk2.js" defer></script>                 <!-- Load room.js -->
-    <script src="monitor.js" defer></script>                 <!-- Load room.js -->
+    <script src="cube.js" defer></script>           <!-- Load cube.js -->
+    <script src="room.js" defer></script>           <!-- Load room.js -->
+    <script src="desk.js" defer></script>           <!-- Load room.js -->
+    <script src="desk2.js" defer></script>          <!-- Load room.js -->
+    <script src="monitor.js" defer></script>        <!-- Load room.js -->
     <script src="main.js" defer></script>           <!-- Load main.js -->
     <script src="controller.js" defer></script>     <!-- Load controller.js -->
 </head>
@@ -182,13 +178,13 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
         </div>
         <div class="container"> <!-- This component holds header information and user notice -->
             <h1>3D Cubicle - WebGL 2.0</h1>
-            <p>COMP 153 - Assignment 5 - 11/7/2024</p>
+            <p>COMP 153 - Assignment 6 - 11/7/2024</p>
             <p>Developer: Wesly Barayuga</p>
 
             <div class="notice-box">
                 <h2>User Notice</h2>
                 <ul>
-                    <li>Click anywhere in the viewport to begin</li>
+                    <li><strong>Click</strong> anywhere in the viewport to begin</li>
                     <li>Move the camera position with <strong>ASWD</strong></li>
                     <li>Move the camera view with your <strong>mouse</strong></li>
                     <li>Exit the viewport by pressing the <strong>ESC</strong> key</li>
@@ -200,6 +196,18 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
                 <h2>About</h2>
                 <ul>
                     <li>This is a 3D recreation of my cubicle when I worked at <strong>Micron Technology</strong> - San Jose, CA</li>
+                </ul>
+            </div>
+            <div class="notice-box">
+                <h2>Rubric</h2>
+                <ul>
+                    <li><strong>112 polygons</strong> used</li>
+                    <li><strong>7 textures</strong> used</li>
+                    <li><strong>ASWD</strong> movement control</li>
+                    <li><strong>PHONG lighting</strong> used in main shader</li>
+                    <li><strong>Transparent shader</strong> used to render cube to indicate environment center at (0x, 0y, 0z)</li>
+                    <li>Total shaders used: 2 - <strong>main shader</strong>, <strong>transparent shader</strong></li>
+                    <li>I worked really hard on this :)</li>
                 </ul>
             </div>
         </div>

@@ -2,10 +2,11 @@
  * File: main.js
  * Author: Wesly Barayuga
  * Date: 11/9/2024
- * Purpose: Define internal state for WebGL 2.0 to model, render, and control a 3D environment
+ * Purpose: Set up and render a 3D cubicle with interactive lighting and camera in WebGL 2.0
  * 
  * User Notice:
- *  - ///
+ *  - Models and renders a cubicle with desk, monitors, and a rotating cube to indicate center of environment
+ *  - Allows for camera control and shader-based rendering
  * =========================================================================================================================== */
 
 let cubeRotationX = 0;
@@ -13,19 +14,19 @@ let cubeRotationY = 0;
 let useDirectionalLight = false;
 let usePositionalLight = true;
 
-let cameraPosition = [-9.425, 5, -10.759]; // Setting the camera 10 units from environment center
-let cameraDirection = [0.761, -0.0719, 0.645]; // Initially looking along the -Z axis
-let cameraSpeed = 0.25; // Adjust for faster/slower movement
+// Camera config
+let cameraPosition = [-9.425, 5, -10.759]; 
+let cameraDirection = [0.761, -0.0719, 0.645]; 
+let cameraSpeed = 0.25;
 
-let pitch = 0; // Up/Down rotation (in radians)
-let yaw = Math.PI / 4; // Left/Right rotation (in radians, starts looking -Z)
+let pitch = 0; // Up/Down rotation 
+let yaw = Math.PI / 4; // Left/Right rotation
 
 // Main shader program initialization
 const vsSource = document.getElementById('vshader').textContent.trim();
 const fsSource = document.getElementById('fshader').textContent.trim();
 const shaderProgram = initShaders(vsSource, fsSource);
 
-//
 // Initialize shaders for the transparent cube
 const vsSourceTransparent = document.getElementById('vshader_transparent').textContent.trim();
 const fsSourceTransparent = document.getElementById('fshader_transparent').textContent.trim();
@@ -47,8 +48,6 @@ const resolution = [canvas.width, canvas.height];
 
 // Get the location of the resolution uniform
 const uTransparentResolutionLocation = gl.getUniformLocation(transparentShaderProgram, "uResolution");
-
-//
 
 // Create index and vertex buffer for the cube
 const { cubeVertexBuffer, cubeIndexBuffer } = createCubeBuffers();
@@ -87,7 +86,7 @@ const light = {
 };
 
 
-// Function to update the camera direction based on pitch and yaw
+// Update the camera direction based on pitch and yaw
 function updateCameraDirection() {
     cameraDirection[0] = Math.cos(pitch) * Math.cos(yaw);
     cameraDirection[1] = Math.sin(pitch);
@@ -142,7 +141,7 @@ function drawScene() {
     gl.uniform1i(uUseDirectionalLightLocation, useDirectionalLight);
     gl.uniform1i(uUsePositionalLightLocation, usePositionalLight);
 
-    // DRAW THE ROOM
+    // DRAW CUBICLE WALLS AND FLOOR
     room.drawFloor();
     room.drawWalls();
 
@@ -150,9 +149,7 @@ function drawScene() {
     desk.drawDesk(modelViewMatrix);
     desk2.drawDesk(modelViewMatrix);
 
-    
-
-    // Use the transparent shader program for the cube
+    // USE TRANSPARENT SHADER TO RENDER CUBE AND ROTATE IT AT THE ORIGIN
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.useProgram(transparentShaderProgram);
@@ -173,7 +170,7 @@ function drawScene() {
     // Send the cube's model view matrix to the transparent shaders
     gl.uniformMatrix4fv(uModelViewMatrixLocationTransparent, false, cubeModelViewMatrix);
 
-    // DRAW THE CUBE with the transparent shader
+    // DRAW THE CUBE
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexBuffer);
     gl.vertexAttribPointer(positionLocationTransparent, 3, gl.FLOAT, false, 6 * 4, 0);
     gl.vertexAttribPointer(normalLocationTransparent, 3, gl.FLOAT, false, 6 * 4, 3 * 4);

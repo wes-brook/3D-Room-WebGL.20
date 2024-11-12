@@ -1,4 +1,10 @@
-// Auxiliary.js
+/* ===========================================================================================================================
+ * File: Auxiliary.js
+ * Author: Wesly Barayuga
+ * Date: 12/9/2024
+ * Purpose: Helper functions for buffer creation, cube setup, and texture loading in WebGL
+ * =========================================================================================================================== */
+
 function initVertexBuffer(vertices) {
     const vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);

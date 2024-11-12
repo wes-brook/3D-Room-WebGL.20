@@ -1,4 +1,15 @@
-// cube.js
+/* ===========================================================================================================================
+ * File: cube.js
+ * Author: Wesly Barayuga
+ * Date: 11/12/2024
+ * Purpose: Generate a 3D cube geometry for WebGL rendering
+ * 
+ * User Notice:
+ *  - Creates vertices and indices for a cube with six faces and normal vectors
+ *  - Cube is represented in normalized space with side length 2
+ *  - Returns arrays for vertices and indices to create vertex buffers
+ * =========================================================================================================================== */
+
 function createCube() {
     vertices = new Float32Array([
         // Front face

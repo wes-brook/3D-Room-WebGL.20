@@ -1,4 +1,15 @@
-// room.js
+/* ===========================================================================================================================
+ * File: room.js
+ * Author: Wesly Barayuga
+ * Date: 11/12/2024
+ * Purpose: Define a 3D room with floor and wall geometry in WebGL
+ * 
+ * User Notice:
+ *  - This class handles the creation and rendering of a room with textured floor and walls
+ *  - Includes methods to initialize geometry, buffers, and textures for the floor and walls
+ *  - Uses WebGL to draw the floor and walls with appropriate textures
+ * =========================================================================================================================== */
+
 class Room {
     constructor() {
         // Initialize floor buffers
@@ -31,7 +42,7 @@ class Room {
         // Bind the floor texture before drawing
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.floorTexture);
-        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 0); // Set texture unit 0
+        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.floorIndexBuffer);
         gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
@@ -44,13 +55,11 @@ class Room {
         gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 8 * 4, 6 * 4);
         gl.enableVertexAttribArray(positionLocation);
         gl.enableVertexAttribArray(normalLocation);
-        //gl.disableVertexAttribArray(texCoordLocation); // Disable texture coordinates
         gl.enableVertexAttribArray(texCoordLocation); 
 
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.wallTexture);
-        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 1); // Set texture unit 1
-
+        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 1); 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.wallIndexBuffer);
         gl.drawElements(gl.TRIANGLES, 30, gl.UNSIGNED_SHORT, 0);
     }
@@ -95,9 +104,6 @@ class Room {
             -10, wallHeight, 10, 1, 0, 0, 0, 1    // top-left, texture (0, 1)
         ]);
         
-
-
-
         const wallIndices = new Uint16Array([
             // Front wall - left segment
             0, 1, 2, 0, 2, 3,
@@ -110,7 +116,6 @@ class Room {
             // Left wall
             16, 17, 18, 16, 18, 19
         ]);
-        
 
         return { wallVertices, wallIndices };
     }

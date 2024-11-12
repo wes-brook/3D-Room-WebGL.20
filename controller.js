@@ -2,10 +2,10 @@
  * File: controller.js
  * Author: Wesly Barayuga
  * Date: 12/9/2024
- * Purpose: Define webpage controller for the webgl viewport
+ * Purpose: Handle user input for camera control and light toggles in WebGL viewport
  * 
  * User Notice:
- *  - ///
+ *  - Manages pointer lock, mouse movement, and keyboard inputs for camera and lighting control
  * =========================================================================================================================== */
 
 const keysPressed = {};

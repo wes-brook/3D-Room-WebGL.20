@@ -2,10 +2,7 @@
  * File: view.js
  * Author: Wesly Barayuga
  * Date: 11/8/2024
- * Purpose: Define graphics view port for out web page
- * 
- * User Notice:
- *  - ///
+ * Purpose: Initialize WebGL context and set up the canvas for rendering
  * =========================================================================================================================== */
 
 let canvas;

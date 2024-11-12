@@ -1,4 +1,16 @@
-// desk.js
+/* ===========================================================================================================================
+ * File: desk2.js
+ * Author: Wesly Barayuga
+ * Date: 11/12/2024
+ * Purpose: Model and render a 3D desk in WebGL 2.0
+ * 
+ * User Notice:
+ *  - Renders a 3D desk with a rectangular tabletop and four legs
+ *  - Applies a texture to the top surface
+ *  - Supports positioning and transformations with a model-view matrix
+ *  - Manages geometry and texture buffers for efficient rendering
+ * =========================================================================================================================== */
+
 class Desk2 {
     constructor() {
         // Initialize desk buffers
@@ -30,7 +42,7 @@ class Desk2 {
         // Bind the desk texture before drawing
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.deskTexture);
-        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 0); // Set texture unit 0
+        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.deskIndexBuffer);
         gl.drawElements(gl.TRIANGLES, 60, gl.UNSIGNED_SHORT, 0);
@@ -90,31 +102,22 @@ class Desk2 {
         const deskIndices = new Uint16Array([
             // Top surface
             0, 1, 2, 0, 2, 3,
-    
             // Bottom surface
             4, 5, 6, 4, 6, 7,
-    
             // Left side
             8, 9, 10, 8, 10, 11,
-    
             // Right side
             12, 13, 14, 12, 14, 15,
-    
             // Front side
             16, 17, 18, 16, 18, 19,
-    
             // Back side
             20, 21, 22, 20, 22, 23,
-    
             // Leg 1
             24, 25, 26, 24, 26, 27,
-    
             // Leg 2
             28, 29, 30, 28, 30, 31,
-    
             // Leg 3
             32, 33, 34, 32, 34, 35,
-    
             // Leg 4
             36, 37, 38, 36, 38, 39
         ]);

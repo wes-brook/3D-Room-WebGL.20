@@ -1,3 +1,17 @@
+/* ===========================================================================================================================
+ * File: monitor.js
+ * Author: Wesly Barayuga
+ * Date: 11/9/2024
+ * Purpose: Define internal state for WebGL 2.0 to model, render, and control a 3D cubicle model
+ * 
+ * User Notice:
+ *  - This class handles the rendering of a 3D monitor object in a WebGL environment
+ *  - The monitor consists of multiple components: the monitor frame, screen, stand, and base
+ *  - Textures are applied to each of these components, and the monitor can be moved and rotated within the scene
+ *  - The screen texture can be switched between three different types based on the provided `screenType`
+ * =========================================================================================================================== */
+
+
 class Monitor {
     constructor() {
         // Initialize monitor buffers
@@ -12,12 +26,12 @@ class Monitor {
         this.baseIndexBuffer = initIndexBuffer(baseIndices);
 
         // Load textures (monitor frame, screen, stand, and base)
-        this.monitorTexture = loadTexture('monitor'); // Main texture for the monitor frame
-        this.screenTexture = loadTexture('screen'); // Texture for the monitor screen
-        this.screenTexture2 = loadTexture('screen2'); // Texture for the monitor screen
-        this.screenTexture3 = loadTexture('screen3'); // Texture for the monitor screen
-        this.standTexture = loadTexture('monitor'); // Texture for the stand
-        this.baseTexture = loadTexture('monitor'); // Texture for the base
+        this.monitorTexture = loadTexture('monitor'); 
+        this.screenTexture = loadTexture('screen'); 
+        this.screenTexture2 = loadTexture('screen2'); 
+        this.screenTexture3 = loadTexture('screen3'); 
+        this.standTexture = loadTexture('monitor'); 
+        this.baseTexture = loadTexture('monitor'); 
 
         this.createMonitorBuffers();
     }
@@ -25,7 +39,7 @@ class Monitor {
     drawMonitor(modelViewMatrix, translation, rotation, screenType) {
         let translationMatrix = mat4.clone(modelViewMatrix);
         mat4.rotateY(translationMatrix, translationMatrix, rotation);
-        mat4.translate(translationMatrix, translationMatrix, translation); // Position the monitor on top of the desk
+        mat4.translate(translationMatrix, translationMatrix, translation); 
 
         // Draw the outer monitor frame
         this.bindBufferAndAttributes(this.monitorVertexBuffer);
@@ -45,15 +59,15 @@ class Monitor {
     drawScreen(modelViewMatrix, translation, rotation, screenType) {
         let translationMatrix = mat4.clone(modelViewMatrix);
         mat4.rotateY(translationMatrix, translationMatrix, rotation);
-        // Adjust the translation to push the base back by 0.5 units in the Z direction
+        // Adjust the translation to push the base back by 0.075 units
         let adjustedTranslation = vec3.clone(translation);
-        adjustedTranslation[2] -= 0.075; // Push back by 0.5 units
+        adjustedTranslation[2] -= 0.075; 
         mat4.translate(translationMatrix, translationMatrix, adjustedTranslation);
 
         const screenScaleFactor = 0.925; // Adjust to control the screen's size
         mat4.scale(translationMatrix, translationMatrix, [screenScaleFactor, screenScaleFactor, screenScaleFactor]);
 
-        // Draw the front (screen) surface of the monitor
+        // Draw the front screen surface of the monitor
         this.bindBufferAndAttributes(this.screenVertexBuffer);
         gl.uniformMatrix4fv(uModelViewMatrixLocation, false, translationMatrix);
         let tex;
@@ -66,36 +80,34 @@ class Monitor {
         if (screenType === "screen3") {
             tex = this.screenTexture3;
         }
-        this.bindTextureAndDraw(tex, this.screenIndexBuffer, 6); // Only the front face
+        this.bindTextureAndDraw(tex, this.screenIndexBuffer, 6);
     }
 
     drawStand(modelViewMatrix, translation, rotation) {
         let translationMatrix = mat4.clone(modelViewMatrix);
         mat4.rotateY(translationMatrix, translationMatrix, rotation);
-        // Adjust the translation to push the base back by 0.5 units in the Z direction
         let adjustedTranslation = vec3.clone(translation);
-        adjustedTranslation[2] -= 0.15; // Push back by 0.5 units
+        adjustedTranslation[2] -= 0.15; 
         mat4.translate(translationMatrix, translationMatrix, adjustedTranslation);
 
         // Draw the stand
         this.bindBufferAndAttributes(this.standVertexBuffer);
         gl.uniformMatrix4fv(uModelViewMatrixLocation, false, translationMatrix);
-        this.bindTextureAndDraw(this.standTexture, this.standIndexBuffer, 6); // Draw the stand
+        this.bindTextureAndDraw(this.standTexture, this.standIndexBuffer, 6); 
     }
 
     drawBase(modelViewMatrix, translation, rotation) {
         let translationMatrix = mat4.clone(modelViewMatrix);
         mat4.rotateY(translationMatrix, translationMatrix, rotation);
         
-        // Adjust the translation to push the base back by 0.5 units in the Z direction
         let adjustedTranslation = vec3.clone(translation);
-        adjustedTranslation[2] -= 1.60; // Push back by 0.5 units
+        adjustedTranslation[2] -= 1.60; 
         mat4.translate(translationMatrix, translationMatrix, adjustedTranslation);
     
         // Draw the base
         this.bindBufferAndAttributes(this.baseVertexBuffer);
         gl.uniformMatrix4fv(uModelViewMatrixLocation, false, translationMatrix);
-        this.bindTextureAndDraw(this.baseTexture, this.baseIndexBuffer, 6); // Draw the base
+        this.bindTextureAndDraw(this.baseTexture, this.baseIndexBuffer, 6); 
     }
     
 
@@ -112,7 +124,7 @@ class Monitor {
     bindTextureAndDraw(texture, indexBuffer, count) {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 0); // Set texture unit 0
+        gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 0); 
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.drawElements(gl.TRIANGLES, count, gl.UNSIGNED_SHORT, 0);
@@ -199,16 +211,12 @@ class Monitor {
         const monitorIndices = new Uint16Array([
             // Back surface
             4, 5, 6, 4, 6, 7,
-
             // Left side
             8, 9, 10, 8, 10, 11,
-
             // Right side
             12, 13, 14, 12, 14, 15,
-
             // Top side
             16, 17, 18, 16, 18, 19,
-
             // Bottom side
             20, 21, 22, 20, 22, 23
         ]);
