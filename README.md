@@ -33,7 +33,7 @@ Here’s a preview of the 3D scene in action:
 ### Installation
 
 1. Clone or download the repository to your local machine.
-2. Open `index.html` in your web browser to load and run the project.
+2. **IMPORTANT: Run a live server** then open `index.html` in your web browser to load and run the project.
 
 ### File Structure
 
