@@ -79,6 +79,7 @@ canvas {
     transition: color 0.3s, transform 0.3s; 
     margin-right: 100%;
     margin-top: 20px; 
+    margin: 10px;
 }
 
 #github-button i {

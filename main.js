@@ -130,8 +130,7 @@ function drawScene() {
     desk.drawDesk(modelViewMatrix);
     desk2.drawDesk(modelViewMatrix);
 
-    // DRAW MY MONITORS
-    //monitor1.drawMonitor(modelViewMatrix);
+    
 
     // Rotate the cube and set the model view matrix for it
     const cubeModelViewMatrix = mat4.clone(modelViewMatrix);
@@ -153,6 +152,9 @@ function drawScene() {
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
     //drawTorch(modelViewMatrix, projectionMatrix);
+
+    // DRAW MY MONITORS
+    monitor1.drawMonitor(modelViewMatrix);
 }
 
 function render() {

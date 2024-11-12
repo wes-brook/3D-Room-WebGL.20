@@ -13,7 +13,8 @@ class Monitor1 {
 
     drawMonitor(modelViewMatrix) {
         let translationMatrix = mat4.clone(modelViewMatrix);
-        mat4.translate(translationMatrix, translationMatrix, [3.5, -1.5, -7]); // Position the monitor on top of the desk
+        mat4.rotateY(translationMatrix, translationMatrix, Math.PI / -4);
+        mat4.translate(translationMatrix, translationMatrix, [0, 5.5, -10]); // Position the monitor on top of the desk
 
         // Bind vertex buffers for position, normal, and texture coordinates
         gl.bindBuffer(gl.ARRAY_BUFFER, this.monitorVertexBuffer);
@@ -36,8 +37,8 @@ class Monitor1 {
     }
 
     createMonitor() {
-        const monitorWidth = 8;
-        const monitorHeight = 5;
+        const monitorWidth = 5;
+        const monitorHeight = 3;
         const monitorDepth = 0.3;
     
         const monitorVertices = new Float32Array([
