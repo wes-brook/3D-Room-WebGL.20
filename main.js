@@ -25,19 +25,15 @@ const vsSource = document.getElementById('vshader').textContent.trim();
 const fsSource = document.getElementById('fshader').textContent.trim();
 const shaderProgram = initShaders();
 
-// Torch shader program initialization
-const torchVsSource = document.getElementById('torch-vshader').textContent.trim();
-const torchFsSource = document.getElementById('torch-fshader').textContent.trim();
-const torchShaderProgram = initShaders(torchVsSource, torchFsSource);
-
-
 // Create index and vertex buffer for the cube
 const { cubeVertexBuffer, cubeIndexBuffer } = createCubeBuffers();
 
 const room = new Room();
 const desk = new Desk();
 const desk2 = new Desk2();
-const monitor1 = new Monitor1();
+const monitor1 = new Monitor();
+const monitor2 = new Monitor();
+const monitor3 = new Monitor();
 // Need to add other objects here...
 
 
@@ -154,7 +150,9 @@ function drawScene() {
     //drawTorch(modelViewMatrix, projectionMatrix);
 
     // DRAW MY MONITORS
-    monitor1.drawMonitor(modelViewMatrix);
+    monitor1.drawMonitor(modelViewMatrix, [0, 5.5, -10], Math.PI / -4);
+    monitor2.drawMonitor(modelViewMatrix, [2.25, 5.5, -8.75], 0.0);
+    monitor3.drawMonitor(modelViewMatrix, [2.5, 5.5, 9], Math.PI / 2);
 }
 
 function render() {
