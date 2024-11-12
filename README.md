@@ -7,7 +7,7 @@ This project showcases a 3D scene rendered using WebGL 2.0, where a 3D recreatio
 ## Live Demo
 
 View the live demo of the project by visiting the following link:  
-[**Live Demo**]([https://wes-brook.github.io/3D-Room-WebGL.20/])
+[**Live Demo**](https://wes-brook.github.io/3D-Room-WebGL.20/)
 
 ## Animated Preview
 
