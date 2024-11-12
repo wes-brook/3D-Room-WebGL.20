@@ -4,6 +4,17 @@
 
 This project showcases a 3D scene rendered using WebGL 2.0, where a 3D recreation of my cubicle during my time working at **Micron Technology** is displayed. The scene includes elements such as a desk, monitors, lighting effects, camera controls, and textures, giving you an interactive view of my workspace. Users can explore the environment using keyboard and mouse input.
 
+## Live Demo
+
+View the live demo of the project by visiting the following link:  
+[**Live Demo**]([https://wes-brook.github.io/3D-Room-WebGL.20/])
+
+## Animated Preview
+
+Here’s a preview of the 3D scene in action:
+
+![Cubicle Demo](other/demo.gif)
+
 ## Features
 
 - **3D Cubicle Model**: A detailed 3D recreation of my cubicle at Micron Technology, including the desk, walls, floor, and monitors.
@@ -11,17 +22,6 @@ This project showcases a 3D scene rendered using WebGL 2.0, where a 3D recreatio
 - **Lighting**: Supports both directional and positional lighting for enhanced realism.
 - **Textures**: Textures are applied to various objects in the scene to create a more realistic environment.
 - **Interactive Elements**: Rotate and move the camera and toggle light sources.
-
-## Live Demo
-
-View the live demo of the project by visiting the following link:  
-[**Live Demo**]([https://your-demo-link.com](https://wes-brook.github.io/3D-Room-WebGL.20/))
-
-## Animated Preview
-
-Here’s a preview of the 3D scene in action:
-
-![Cubicle Demo](other/demo.gif)
 
 ## Getting Started
 
