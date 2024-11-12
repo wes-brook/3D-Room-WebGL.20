@@ -57,10 +57,10 @@ class Room {
 
     createFloor() {
         const floorVertices = new Float32Array([
-            -25, -2,  25, 0, 1, 0, 0, 0,   // bottom-left, texture (0, 0)
-             50, -2,  25, 0, 1, 0, 1, 0,   // bottom-right, texture (1, 0)
-             50, -2, -25, 0, 1, 0, 1, 1,   // top-right, texture (1, 1)
-            -25, -2, -25, 0, 1, 0, 0, 1    // top-left, texture (0, 1)
+            -10, -2,  10, 0, 1, 0, 0, 0,   // bottom-left, texture (0, 0)
+             10, -2,  10, 0, 1, 0, 1, 0,   // bottom-right, texture (1, 0)
+             10, -2, -10, 0, 1, 0, 1, 1,   // top-right, texture (1, 1)
+            -10, -2, -10, 0, 1, 0, 0, 1    // top-left, texture (0, 1)
         ]);
         const floorIndices = new Uint16Array([0, 1, 2, 0, 2, 3]);
 
@@ -71,28 +71,28 @@ class Room {
         const wallHeight = 10;
         const wallVertices = new Float32Array([
             // Front wall
-            -25, -2,  25, 0, 0, -1, 0, 0, // bottom-left, texture (0, 0)
-             50, -2,  25, 0, 0, -1, 1, 0, // bottom-right, texture (1, 0)
-             50, wallHeight, 25, 0, 0, -1, 1, 1, // top-right, texture (1, 1)
-            -25, wallHeight, 25, 0, 0, -1, 0, 1, // top-left, texture (0, 1)
-
+            -10, -2,  10, 0, 0, -1, 0, 0, // bottom-left, texture (0, 0)
+             10, -2,  10, 0, 0, -1, 1, 0, // bottom-right, texture (1, 0)
+             10, wallHeight, 10, 0, 0, -1, 1, 1, // top-right, texture (1, 1)
+            -10, wallHeight, 10, 0, 0, -1, 0, 1, // top-left, texture (0, 1)
+    
             // Right wall
-             50, -2,  25, -1, 0, 0, 0, 0, // bottom-left, texture (0, 0)
-             50, -2, -25, -1, 0, 0, 1, 0, // bottom-right, texture (1, 0)
-             50, wallHeight, -25, -1, 0, 0, 1, 1, // top-right, texture (1, 1)
-             50, wallHeight, 25, -1, 0, 0, 0, 1, // top-left, texture (0, 1)
-
+             10, -2,  10, -1, 0, 0, 0, 0, // bottom-left, texture (0, 0)
+             10, -2, -10, -1, 0, 0, 1, 0, // bottom-right, texture (1, 0)
+             10, wallHeight, -10, -1, 0, 0, 1, 1, // top-right, texture (1, 1)
+             10, wallHeight, 10, -1, 0, 0, 0, 1, // top-left, texture (0, 1)
+    
             // Back wall
-            -25, -2, -25, 0, 0, 1, 0, 0, // bottom-left, texture (0, 0)
-             50, -2, -25, 0, 0, 1, 1, 0, // bottom-right, texture (1, 0)
-             50, wallHeight, -25, 0, 0, 1, 1, 1, // top-right, texture (1, 1)
-            -25, wallHeight, -25, 0, 0, 1, 0, 1, // top-left, texture (0, 1)
-
+            -10, -2, -10, 0, 0, 1, 0, 0, // bottom-left, texture (0, 0)
+             10, -2, -10, 0, 0, 1, 1, 0, // bottom-right, texture (1, 0)
+             10, wallHeight, -10, 0, 0, 1, 1, 1, // top-right, texture (1, 1)
+            -10, wallHeight, -10, 0, 0, 1, 0, 1, // top-left, texture (0, 1)
+    
             // Left wall
-            -25, -2,  25, 1, 0, 0, 0, 0, // bottom-left, texture (0, 0)
-            -25, -2, -25, 1, 0, 0, 1, 0, // bottom-right, texture (1, 0)
-            -25, wallHeight, -25, 1, 0, 0, 1, 1, // top-right, texture (1, 1)
-            -25, wallHeight, 25, 1, 0, 0, 0, 1  // top-left, texture (0, 1)
+            -10, -2,  10, 1, 0, 0, 0, 0, // bottom-left, texture (0, 0)
+            -10, -2, -10, 1, 0, 0, 1, 0, // bottom-right, texture (1, 0)
+            -10, wallHeight, -10, 1, 0, 0, 1, 1, // top-right, texture (1, 1)
+            -10, wallHeight, 10, 1, 0, 0, 0, 1  // top-left, texture (0, 1)
         ]);
 
         const wallIndices = new Uint16Array([

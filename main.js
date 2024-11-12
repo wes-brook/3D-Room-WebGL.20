@@ -13,19 +13,23 @@ let cubeRotationY = 0;
 let useDirectionalLight = false;
 let usePositionalLight = true;
 
-let cameraPosition = [-5, 0, 10]; // Setting the camera 10 units from environment center
-let cameraDirection = [0.6, 0, -1]; // Initially looking along the -Z axis
+let cameraPosition = [-7.4, 4, 9]; // Setting the camera 10 units from environment center
+let cameraDirection = [0.57, -0.35, -0.74]; // Initially looking along the -Z axis
 let cameraSpeed = 0.25; // Adjust for faster/slower movement
 
 let pitch = 0; // Up/Down rotation (in radians)
 let yaw = -Math.PI / 2; // Left/Right rotation (in radians, starts looking -Z)
 
-// Vertex shader program
+// Main shader program initialization
 const vsSource = document.getElementById('vshader').textContent.trim();
-// Fragment shader program
 const fsSource = document.getElementById('fshader').textContent.trim();
-
 const shaderProgram = initShaders();
+
+// Torch shader program initialization
+const torchVsSource = document.getElementById('torch-vshader').textContent.trim();
+const torchFsSource = document.getElementById('torch-fshader').textContent.trim();
+const torchShaderProgram = initShaders(torchVsSource, torchFsSource);
+
 
 // Create index and vertex buffer for the cube
 const { cubeVertexBuffer, cubeIndexBuffer } = createCubeBuffers();
@@ -122,6 +126,7 @@ function drawScene() {
 
     // Rotate the cube and set the model view matrix for it
     const cubeModelViewMatrix = mat4.clone(modelViewMatrix);
+    mat4.scale(cubeModelViewMatrix, cubeModelViewMatrix, [0.5, 0.5, 0.5]);
     mat4.rotate(cubeModelViewMatrix, cubeModelViewMatrix, cubeRotationX, [1, 0, 0]);
     mat4.rotate(cubeModelViewMatrix, cubeModelViewMatrix, cubeRotationY, [0, 1, 0]);
 
@@ -137,12 +142,13 @@ function drawScene() {
     gl.disableVertexAttribArray(texCoordLocation);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer);
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+
+    //drawTorch(modelViewMatrix, projectionMatrix);
 }
 
 function render() {
     // Draw the scene
     drawScene();
-    
     // Request to render the next frame
     requestAnimationFrame(render);
 }

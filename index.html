@@ -43,7 +43,6 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
             gl_Position = uProjectionMatrix * vec4(vFragPos, 1.0);
         }
     </script>
-
     <!-- Fragment Shader with custom Phong Reflection implementation -->
     <script type="shader-fragment" id="fshader">
         precision mediump float;
@@ -64,10 +63,10 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
         uniform sampler2D uTexture;
         
         void main() {
-            vec3 ambient = uAmbientColor;
+            vec3 ambient = uAmbientColor * 1.5;
             vec3 color = texture2D(uTexture, vTexCoord).rgb;
         
-            vec3 diffuse = vec3(0.1);
+            vec3 diffuse = vec3(0.025);
             if (uUseDirectionalLight) {
                 float diff = max(dot(vNormal, -vLightDirection), 0.0);
                 diffuse += diff * uLightColor;
@@ -86,13 +85,79 @@ Purpose:    Define HTML code for a controllable 3D cube with Phong Reflection mo
         
             gl_FragColor = vec4(color * (ambient + diffuse) + specular, 1.0);
         }
-    </script>                                     <!-- NOTE: Start of project workflow -->  
-    <script src="view.js" defer></script>         <!-- Initialize `gl` and `canvas` -->
-    <script src="Auxiliary.js"></script>
-    <script src="cube.js"></script>
-    <script src="room.js"></script>
-    <script src="main.js" defer></script>         <!-- Load main.js -->
-    <script src="controller.js" defer></script>   <!-- Load controller.js -->
+    </script>                                 
+    <script type="shader-vertex" id="torch-vshader">
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+        
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+    
+        varying vec3 vNormal;
+        varying vec3 vFragPos;
+    
+        void main() {
+            vFragPos = vec3(uModelViewMatrix * vec4(aPosition, 1.0));
+            vNormal = normalize(mat3(uModelViewMatrix) * aNormal);
+            gl_Position = uProjectionMatrix * vec4(vFragPos, 1.0);
+        }
+    </script>
+    <script type="shader-fragment" id="torch-fshader">
+        precision mediump float;
+
+varying vec3 vNormal;
+varying vec3 vFragPos;
+varying vec3 vLightDirection;
+varying vec3 vViewDirection;
+varying vec2 vTexCoord;
+
+uniform vec3 uLightColor;
+uniform vec3 uAmbientColor;
+uniform vec3 uLightPosition;
+
+uniform bool uUseDirectionalLight;
+uniform bool uUsePositionalLight;
+
+uniform sampler2D uTexture;
+
+void main() {
+    vec3 ambient = uAmbientColor;
+    vec3 color = texture2D(uTexture, vTexCoord).rgb;
+
+    // Directional lighting
+    vec3 diffuse = vec3(0.0);
+    if (uUseDirectionalLight) {
+        float diff = max(dot(vNormal, -vLightDirection), 0.0);
+        diffuse += diff * uLightColor;
+    }
+
+    // Positional lighting (torch light effect)
+    if (uUsePositionalLight) {
+        float distance = length(uLightPosition - vFragPos);
+        vec3 lightDir = normalize(uLightPosition - vFragPos);
+        float diff = max(dot(vNormal, lightDir), 0.0);
+        diffuse += diff * uLightColor * 3.0 / (distance * distance * 0.1); // Attenuation
+    }
+
+    // Reflection for specular highlights
+    vec3 reflectDir = reflect(-vLightDirection, vNormal);
+    float spec = pow(max(dot(vViewDirection, reflectDir), 0.0), 32.0);
+    vec3 specular = spec * uLightColor;
+
+    // Final color output with ambient, diffuse, and specular lighting
+    gl_FragColor = vec4(color * (ambient + diffuse) + specular, 1.0);
+}
+
+
+    </script>    
+                                                    <!-- NOTE: Start of project workflow -->  
+    <script src="view.js" defer></script>           <!-- Initialize `gl` and `canvas` -->
+    <script src="Auxiliary.js"></script>            <!-- Load helper functions -->
+    <script src="cube.js" defer></script>                 <!-- Load cube.js -->
+    <script src="room.js" defer></script>                 <!-- Load room.js -->
+    <script src="torch.js" defer></script>
+    <script src="main.js" defer></script>           <!-- Load main.js -->
+    <script src="controller.js" defer></script>     <!-- Load controller.js -->
 </head>
 <body>
     <div class="layout">
