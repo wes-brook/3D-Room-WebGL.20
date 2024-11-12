@@ -13,8 +13,8 @@ let cubeRotationY = 0;
 let useDirectionalLight = false;
 let usePositionalLight = true;
 
-let cameraPosition = [-7.4, 4, 9]; // Setting the camera 10 units from environment center
-let cameraDirection = [0.57, -0.35, -0.74]; // Initially looking along the -Z axis
+let cameraPosition = [-9.5, 5, 9.5]; // Setting the camera 10 units from environment center
+let cameraDirection = [0.57, -0.1, -0.64]; // Initially looking along the -Z axis
 let cameraSpeed = 0.25; // Adjust for faster/slower movement
 
 let pitch = 0; // Up/Down rotation (in radians)
@@ -35,6 +35,9 @@ const torchShaderProgram = initShaders(torchVsSource, torchFsSource);
 const { cubeVertexBuffer, cubeIndexBuffer } = createCubeBuffers();
 
 const room = new Room();
+const desk = new Desk();
+const desk2 = new Desk2();
+const monitor1 = new Monitor1();
 // Need to add other objects here...
 
 
@@ -120,9 +123,15 @@ function drawScene() {
     gl.uniform1i(uUsePositionalLightLocation, usePositionalLight);
 
     // DRAW THE ROOM
-
     room.drawFloor();
     room.drawWalls();
+
+    // DRAW MY DESK
+    desk.drawDesk(modelViewMatrix);
+    desk2.drawDesk(modelViewMatrix);
+
+    // DRAW MY MONITORS
+    //monitor1.drawMonitor(modelViewMatrix);
 
     // Rotate the cube and set the model view matrix for it
     const cubeModelViewMatrix = mat4.clone(modelViewMatrix);

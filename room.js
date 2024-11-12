@@ -52,7 +52,7 @@ class Room {
         gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uTexture'), 1); // Set texture unit 1
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.wallIndexBuffer);
-        gl.drawElements(gl.TRIANGLES, 24, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, 30, gl.UNSIGNED_SHORT, 0);
     }
 
     createFloor() {
@@ -70,41 +70,47 @@ class Room {
     createWalls() {
         const wallHeight = 10;
         const wallVertices = new Float32Array([
-            // Front wall
-            -10, -2,  10, 0, 0, -1, 0, 0, // bottom-left, texture (0, 0)
-             10, -2,  10, 0, 0, -1, 1, 0, // bottom-right, texture (1, 0)
-             10, wallHeight, 10, 0, 0, -1, 1, 1, // top-right, texture (1, 1)
-            -10, wallHeight, 10, 0, 0, -1, 0, 1, // top-left, texture (0, 1)
-    
-            // Right wall
-             10, -2,  10, -1, 0, 0, 0, 0, // bottom-left, texture (0, 0)
-             10, -2, -10, -1, 0, 0, 1, 0, // bottom-right, texture (1, 0)
-             10, wallHeight, -10, -1, 0, 0, 1, 1, // top-right, texture (1, 1)
-             10, wallHeight, 10, -1, 0, 0, 0, 1, // top-left, texture (0, 1)
-    
-            // Back wall
-            -10, -2, -10, 0, 0, 1, 0, 0, // bottom-left, texture (0, 0)
-             10, -2, -10, 0, 0, 1, 1, 0, // bottom-right, texture (1, 0)
-             10, wallHeight, -10, 0, 0, 1, 1, 1, // top-right, texture (1, 1)
-            -10, wallHeight, -10, 0, 0, 1, 0, 1, // top-left, texture (0, 1)
-    
-            // Left wall
-            -10, -2,  10, 1, 0, 0, 0, 0, // bottom-left, texture (0, 0)
-            -10, -2, -10, 1, 0, 0, 1, 0, // bottom-right, texture (1, 0)
-            -10, wallHeight, -10, 1, 0, 0, 1, 1, // top-right, texture (1, 1)
-            -10, wallHeight, 10, 1, 0, 0, 0, 1  // top-left, texture (0, 1)
+            // Front wall (unchanged)
+            -10, -2,  10, 0, 0, -1, 0, 0,          // bottom-left, texture (0, 0)
+             10, -2,  10, 0, 0, -1, 1, 0,          // bottom-right, texture (1, 0)
+             10, wallHeight, 10, 0, 0, -1, 1, 1,   // top-right, texture (1, 1)
+            -10, wallHeight, 10, 0, 0, -1, 0, 1,   // top-left, texture (0, 1)
+        
+            // Right wall (unchanged)
+             10, -2,  10, -1, 0, 0, 0, 0,          // bottom-left, texture (0, 0)
+             10, -2, -10, -1, 0, 0, 1, 0,          // bottom-right, texture (1, 0)
+             10, wallHeight, -10, -1, 0, 0, 1, 1,  // top-right, texture (1, 1)
+             10, wallHeight, 10, -1, 0, 0, 0, 1,   // top-left, texture (0, 1)
+
+            // Back wall (right segment)
+            -3, -2, -10, 0, 0, 1, 0, 0,         // bottom-left of right segment, texture (0.8, 0)
+            10, -2, -10, 0, 0, 1, 1, 0,           // bottom-right, texture (1, 0)
+            10, wallHeight, -10, 0, 0, 1, 1, 1,   // top-right, texture (1, 1)
+            -3, wallHeight, -10, 0, 0, 1, 0, 1, // top-left of right segment, texture (0.8, 1)
+        
+            // Left wall (unchanged)
+            -10, -2,  10, 1, 0, 0, 0, 0,          // bottom-left, texture (0, 0)
+            -10, -2, -10, 1, 0, 0, 1, 0,          // bottom-right, texture (1, 0)
+            -10, wallHeight, -10, 1, 0, 0, 1, 1,  // top-right, texture (1, 1)
+            -10, wallHeight, 10, 1, 0, 0, 0, 1    // top-left, texture (0, 1)
         ]);
+        
+
+
 
         const wallIndices = new Uint16Array([
-            // Front wall
+            // Front wall - left segment
             0, 1, 2, 0, 2, 3,
-            // Right wall
+            // Front wall - right segment
             4, 5, 6, 4, 6, 7,
-            // Back wall
+            // Right wall
             8, 9, 10, 8, 10, 11,
+            // Back wall
+            12, 13, 14, 12, 14, 15,
             // Left wall
-            12, 13, 14, 12, 14, 15
+            16, 17, 18, 16, 18, 19
         ]);
+        
 
         return { wallVertices, wallIndices };
     }

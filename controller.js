@@ -102,8 +102,8 @@ function updateMovement() {
 }
 
 function updateCubeRotation() {
-    cubeRotationY += 0.0006;
-    cubeRotationX += 0.0006;
+    cubeRotationY += 0.006;
+    cubeRotationX += 0.006;
 
     // Keep updating cube rotation
     requestAnimationFrame(updateCubeRotation);
