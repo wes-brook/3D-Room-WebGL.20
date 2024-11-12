@@ -20,6 +20,7 @@ document.addEventListener("pointerlockchange", () => {
     console.log("Pointer locked:", pointerLocked); // Debugging to check pointer lock status
 
     if (pointerLocked) {
+        
         // Enable mouse movement for camera control only when locked
         document.addEventListener("mousemove", handleMouseMove);
         

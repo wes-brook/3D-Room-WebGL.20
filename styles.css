@@ -44,8 +44,8 @@ p {
     margin-bottom: 10px;
 }
 .notice-box ul {
-    list-style-type: none;
-    padding: 0;
+    list-style-type: disc;
+    padding: 1;
 }
 .notice-box ul li {
     margin: 8px 0;

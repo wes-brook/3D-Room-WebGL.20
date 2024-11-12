@@ -13,12 +13,12 @@ let cubeRotationY = 0;
 let useDirectionalLight = false;
 let usePositionalLight = true;
 
-let cameraPosition = [-9.5, 5, 9.5]; // Setting the camera 10 units from environment center
-let cameraDirection = [0.57, -0.1, -0.64]; // Initially looking along the -Z axis
+let cameraPosition = [-9.425, 5, -10.759]; // Setting the camera 10 units from environment center
+let cameraDirection = [0.761, -0.0719, 0.645]; // Initially looking along the -Z axis
 let cameraSpeed = 0.25; // Adjust for faster/slower movement
 
 let pitch = 0; // Up/Down rotation (in radians)
-let yaw = -Math.PI / 2; // Left/Right rotation (in radians, starts looking -Z)
+let yaw = Math.PI / 4; // Left/Right rotation (in radians, starts looking -Z)
 
 // Main shader program initialization
 const vsSource = document.getElementById('vshader').textContent.trim();
@@ -147,12 +147,11 @@ function drawScene() {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer);
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
-    //drawTorch(modelViewMatrix, projectionMatrix);
 
     // DRAW MY MONITORS
-    monitor1.drawMonitor(modelViewMatrix, [0, 5.5, -10], Math.PI / -4);
-    monitor2.drawMonitor(modelViewMatrix, [2.25, 5.5, -8.75], 0.0);
-    monitor3.drawMonitor(modelViewMatrix, [2.5, 5.5, 9], Math.PI / 2);
+    monitor1.drawMonitor(modelViewMatrix, [0, 5.5, -10], Math.PI / -4, "screen2");
+    monitor2.drawMonitor(modelViewMatrix, [2.25, 5.5, -8.75], 0.0, "screen3");
+    monitor3.drawMonitor(modelViewMatrix, [-2.5, 5.5, -9], Math.PI / 2 + Math.PI, "screen1");
 }
 
 function render() {
