@@ -21,7 +21,6 @@ Here’s a preview of the 3D scene in action:
 - **Camera Controls**: Uses mouse and keyboard input to move around the scene and adjust the camera view to explore the cubicle.
 - **Lighting**: Supports both directional and positional lighting for enhanced realism.
 - **Textures**: Textures are applied to various objects in the scene to create a more realistic environment.
-- **Interactive Elements**: Rotate and move the camera and toggle light sources.
 
 ## Getting Started
 
@@ -47,7 +46,7 @@ Here’s a preview of the 3D scene in action:
 ### Key Controls
 
 - **WASD**: Move the camera forward, backward, and sideways.
-- **Mouse**: Click and drag to look around the scene (pointer lock enabled).
+- **Mouse**: Click on the viewport and move your mouse to look around the scene (pointer lock enabled).
 - **1 / 2**: Toggle positional light on/off.
 - **3 / 4**: Toggle directional light on/off.
 
